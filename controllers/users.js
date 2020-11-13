@@ -1,3 +1,5 @@
+const User = require('../models/User')
+
 let users = [
     { uuid : 1, name : "Dilshan Fernando", Age : 24 }
 ]
@@ -5,23 +7,24 @@ let users = [
 // uuid for user unq id
 let uuid = 2
 
-export const getUsers = (req, res)=>{
-    res.send(users)
+ const getUsers = async (req, res)=>{
+    const _users = await User.find() // fetch all users from mongo db
+    res.send( _users )
 }
 
-export const addUser = (req , res)=>{
+const addUser = (req , res)=>{
     users.push({ ...req.body , uuid : uuid++ })
     res.send(users)
 }
 
-export const getUser = (req , res)=>{
+const getUser = (req , res)=>{
     const { uuid } = req.params
 
     const results = users.filter(el => el.uuid.toString() == uuid.toString())
     res.send( results )
 }
 
-export const deleteUser = (req , res)=>{
+const deleteUser = (req , res)=>{
     const { uuid } = req.params
 
     let index = users.findIndex(el => el.uuid.toString() == uuid.toString())
@@ -33,3 +36,10 @@ export const deleteUser = (req , res)=>{
         res.send(`could not find ${uuid} user`)
     }
 }
+
+module.exports = {
+    getUsers,
+    addUser,
+    deleteUser,
+    getUser
+};

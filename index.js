@@ -1,11 +1,20 @@
-import express from 'express'
-import bodyParser from 'body-parser'
-import usersRoutes from './routes/users.js'
+const express = require('express')
+const mongoose = require('mongoose')
+const bodyParser = require('body-parser')
+
+const usersRoutes = require('./routes/users.js')
+
+const url = 'mongodb://localhost/cruddb'
 
 const app = express()
 const PORT = 2000
-
 app.use(bodyParser.json())
+
+mongoose.connect(url , { useNewUrlParser : true ,  useUnifiedTopology: true })
+const con = mongoose.connection
+
+con.on('open' , ()=> console.log( 'Connected to DB' ))
+
 
 app.use('/users' , usersRoutes )
 
