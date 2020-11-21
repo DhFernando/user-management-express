@@ -6,7 +6,7 @@ const user = require('../controllers/users.js')
 
 // user routes
 
-router.get('/' , user.getUsers )
+router.get('/'  ,user.getUsers )
 router.post('/' , user.addUser )
 router.get('/:uuid' , user.getUser)
 router.delete('/:uuid' , user.deleteUser)

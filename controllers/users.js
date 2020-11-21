@@ -12,16 +12,24 @@ let uuid = 2
     res.send( _users )
 }
 
-const addUser = (req , res)=>{
-    users.push({ ...req.body , uuid : uuid++ })
-    res.send(users)
+const addUser = async(req , res)=>{ 
+    const newUser = new User(req.body)
+    try{
+        const addedUser = await newUser.save()
+        res.status(201).json(addedUser)
+    }catch(err){
+        res.status(400).json( {message : err.message} )
+    }
 }
 
-const getUser = (req , res)=>{
+const getUser = async (req , res)=>{
     const { uuid } = req.params
 
-    const results = users.filter(el => el.uuid.toString() == uuid.toString())
-    res.send( results )
+    try{ 
+        res.status(201).json(await findUser(uuid))
+    }catch(err){
+        res.status(400).json( {message : err.message} )
+    }
 }
 
 const deleteUser = (req , res)=>{
@@ -34,6 +42,17 @@ const deleteUser = (req , res)=>{
         res.send( `${uuid} had been removed from the Database` )
     }else{
         res.send(`could not find ${uuid} user`)
+    }
+}
+
+const findUser = async( uuid ) =>{
+    let user = null
+    try{
+        user = await User.findById(uuid)
+        if( user == null ) return res.status(404).json({ message : 'oops !! .. :-( Cannot find user' }) ; 
+        return  user
+    }catch(err){
+        return res.status(500).json( {message : err.message} )
     }
 }
 
