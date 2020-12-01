@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 
 // import user functions
-const user = require('../controllers/users.js')
+const user = require('../controllers/user.js')
 
 // user routes
 
